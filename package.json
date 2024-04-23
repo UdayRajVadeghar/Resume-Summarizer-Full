@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/free-brands-svg-icons": "^6.5.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@octoai/client": "^0.4.1",
     "next": "14.0.4",
     "pdfreader": "^3.0.2",

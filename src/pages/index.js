@@ -11,6 +11,9 @@ export default function Home() {
   const [summary, setSummary] = useState("");
   const [metadata, setMetadata] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const[long , setLong] = useState(false);
+  const[short , setShort] = useState(false);
+  const[normal , setNormal] = useState(false);
 
   const summarizeText = (text) => {
     fetch(SUMMARIZE_URL, {
@@ -19,11 +22,15 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setIsLoading(false); //doubt 
+        setIsLoading(false); 
         setSummary(data.message.content);
         localStorage.setItem("summary", data.message.content);
       });
   };
+
+  
+
+  
 
   const onLoadFile = (event) => {
     const file = event.target.files[0];
@@ -42,18 +49,40 @@ export default function Home() {
           setMetadata(data.info);
         });
 
-        pdf.getPage(1).then((page) => {
-          page.getTextContent().then((textContent) => {
-            let text = "";
-            textContent.items.forEach((item) => {
-              text += item.str + " ";
-            });
+        pdfjsLib.getDocument({ data: typedarray }).promise.then((pdf) => {
 
-            document.getElementById("pdfContent").innerText = text;
-            setIsLoading(true);
-            summarizeText(text);
-          });
+            const numPages = pdf.numPages;
+            let fullText = "";
+        
+            const getPageText = (pageNum) => {
+                return pdf.getPage(pageNum).then((page) => {
+                    return page.getTextContent().then((textContent) => {
+                        let pageText = "";
+                        textContent.items.forEach((item) => {
+                            pageText += item.str + " ";
+                        });
+                        return pageText;
+                    });
+                });
+            };
+        
+            const promises = [];
+            for (let i = 1; i <= numPages; i++) {
+                promises.push(getPageText(i));
+            }
+        
+            Promise.all(promises).then((pageTexts) => {
+                pageTexts.forEach((pageText) => {
+                    fullText += pageText;
+                });
+        
+                // Now you have fullText containing text from all pages
+                document.getElementById("pdfContent").innerText = fullText;
+                setIsLoading(true);
+                summarizeText(fullText);
+            });
         });
+      
       });
     };
     fileReader.readAsArrayBuffer(file);
@@ -99,13 +128,56 @@ export default function Home() {
            Welcome to Resume Summarizer! Click to instantly condense your resume, efficiently highlighting key details for easy reference.
         </p>
       </div>
+      <div>
+  <div className='px-10 pt-10 mx-10 items-center justify-around text-3xl'>
+    What type of Summarization do you want?
+  </div>
+  <div className='px-10 pt-10 mx-10 flex items-center justify-between'>
+        <button
+          onClick={() => {
+            setShort(true);
+            setNormal(false);
+            setLong(false);
+          }}  
+          className={`rounded-xl text-white font-bold p-4 flex items-center transition duration-300 ease-in-out ${short ? 'bg-teal-500 hover:bg-green-600' : 'bg-red-600 hover:bg-red-700'}`}
+          disabled={short}
+        >
+          <span>Short Summary</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setShort(false);
+            setNormal(true);
+            setLong(false);
+          }}
+          className={`rounded-xl mt-10 p-4 text-white font-bold flex items-center transition duration-300 ease-in-out ${normal ? 'bg-teal-500 hover:bg-green-600' : 'bg-red-600 hover:bg-red-700'}`}
+          disabled={long && short}
+        >
+          <span>Normal Summary</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setShort(false);
+            setNormal(false);
+            setLong(true);
+          }}
+          className={`rounded-xl mt-10 p-4 text-white font-bold flex items-center transition duration-300 ease-in-out ${long ? 'bg-teal-500 hover:bg-green-600' : 'bg-red-600 hover:bg-red-700'}`}
+          disabled={short && normal}
+        >
+          <span>Long Summary</span>
+        </button>
+      </div>
+    </div>
+
+
       <div className="m-3 px-10 pt-10 mx-10 items-center justify-around">
         <div className="text-3xl">
           Click Here to Summarize the Resume.<br></br>Make sure it is <span className='font-bold'>.pdf</span> format
         </div>
         <div>
-          
-            <button
+          <button
             onClick={() => document.getElementById("file-input").click()}
             className="rounded-xl mt-10 text-white bg-red-600 p-4 font-bold flex items-center hover:bg-red-700 transition duration-300 ease-in-out"
           >

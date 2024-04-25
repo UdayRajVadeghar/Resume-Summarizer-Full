@@ -2,6 +2,14 @@ const { Client } = require("@octoai/client")
 
 const client = new Client(process.env.OCTO_CLIENT_TOKEN);
 
+import * as index from "../index.js";
+
+const filter1 = index.long ? "a long summary" : "";
+const filter2 = index.short ? "very short summary" : "";
+const filter3 = index.normal ? "normal words" : "";
+
+
+
 
 export default async function handler(req, res) {
   const body = JSON.parse(req.body);
@@ -10,7 +18,7 @@ export default async function handler(req, res) {
     "messages": [
       {
         "role": "system",
-        "content": `Summarize the following resume and give me detail in points .Remember I have used summary.split('• ') to segregate the points so give me in this manner.Give full summary.${body.text}`
+        "content": `Summarize the following resume in ${filter1}${filter2}${filter3} and give me detail in points .Remember I have used summary.split('• ') to segregate the points so give me in this manner.Give full summary which is .${body.text}`
       },
     ],
     "model": "mixtral-8x7b-instruct-fp16",

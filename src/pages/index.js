@@ -19,9 +19,8 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setIsLoading(false);
+        setIsLoading(false); //doubt 
         setSummary(data.message.content);
-        
         localStorage.setItem("summary", data.message.content);
       });
   };
@@ -80,17 +79,24 @@ export default function Home() {
 
   return (
     <div className="font-serif">
-      <nav className=" bg-teal-500 sticky top-0 z-50">
-        <ul className="flex justify-around p-4 items-center">
-          <li className="w-4/5 text-5xl font-serif">Resume Summarizer</li>
-          <li className="border-2 text-xl bg-lime-500 rounded-lg p-2 px-3"><button>Login</button></li>
-          <li className="border-2 text-xl bg-lime-500 rounded-lg p-2 px-3"><button>Sign Up</button></li>
-        </ul>   
+      <nav className="bg-teal-700 sticky top-0 z-50 shadow-lg shadow-gray-400">
+        <ul className="flex flex-wrap justify-between p-4 items-center">
+          <li className="w-full md:w-auto text-4xl md:text-5xl font-serif mb-4 md:mb-0 text-white ">Resume Summarizer</li>
+          <div className="flex flex-wrap md:flex-no-wrap justify-center md:justify-end w-full md:w-auto">
+            <li className="border-2 text-lg md:text-xl bg-lime-500 rounded-lg p-2 px-3 m-1">
+              <button>Login</button>
+            </li>
+            <li className="border-2 text-lg md:text-xl bg-lime-500 rounded-lg p-2 px-3 m-1">
+              <button>Sign Up</button>
+            </li>
+          </div>
+        </ul>
       </nav>
+
       <input className="hidden" id="file-input" type="file" />
       <div>
-        <p className="text-3xl p-10 m-3 mx-10">
-           Welcome to Resume Summarizer! Click to instantly condense your resume, efficiently highlighting key details for easy reference
+        <p className="text-3xl p-10 m-3 mx-10 bg-teal-200 shadow-lg shadow-gray-300  mt-12 rounded-xl">
+           Welcome to Resume Summarizer! Click to instantly condense your resume, efficiently highlighting key details for easy reference.
         </p>
       </div>
       <div className="m-3 px-10 pt-10 mx-10 items-center justify-around">
@@ -107,9 +113,9 @@ export default function Home() {
           </button>
         </div>
       </div>
-      <div className="flex justify-center h-10 items-center text-4xl font-serif p-10 m-10 bg-teal-200">
+      <div className="flex justify-center h-10 items-center text-4xl font-serif p-10 m-10 bg-teal-200 rounded-xl">
         <h1>
-          Summerized Resume
+          <span>Summerized Resume Content</span>
         </h1>  
       </div>
       <div className="text-2xl p-10">
@@ -128,9 +134,9 @@ export default function Home() {
           </ul>
         )}
       </div>
-      <div className="flex justify-center h-10 items-center text-4xl font-serif p-10 m-10 bg-teal-200">
+      <div className="flex justify-center h-10 items-center text-4xl font-serif p-10 m-10 bg-teal-200 rounded-xl">
         <h1>
-          Text From Resume
+          Text From Your Resume
         </h1>  
         </div>
       <div className="text-gray-800 bg-white rounded-lg shadow-md m-10 text-2xl p-4" id="pdfContent">
@@ -138,11 +144,11 @@ export default function Home() {
       </div>
       <div className="text-2xl">
         <div className="">
-          <div className='flex justify-center h-10 items-center text-4xl font-serif p-10 m-10 bg-teal-200'>
-            <h1>Metadata</h1>
+          <div className='flex justify-center h-10 items-center text-4xl font-serif p-10 m-10 bg-teal-200 rounded-xl'>
+            <h1>Available Metadata</h1>
           </div>
           
-          <div className='m-10'>
+          <div className='m-10 shadow-lg p-4 sahdow-gray-400'>
             <ul className="mt-4">
               {Object.entries(metadata).map(([key, value]) => (
                 <li key={key} className="pt-2">
@@ -191,7 +197,7 @@ export default function Home() {
             <div className='p-4'>
               <ul>
                 <li className='p-2 font-bold'><button>Procuct</button></li>
-                <li className='p-2'><button>Why Pdf Summarizer?</button></li>
+                <li className='p-2'><button>Why <span className='font-bold'>DeepDive Labs?</span></button></li>
                 <li className='p-2'><button>Integrations</button></li>
                 <li className='p-2'><button>For Engineering Teams</button></li>
                 <li className='p-2'><button>For Marketing Teams</button></li>
@@ -213,7 +219,7 @@ export default function Home() {
           </div>
         
         </div>
-        <p className='pl-10'>©2022 RevenueCat</p>
+        <p className='pl-10'>@2024 UdayRaj</p>
       </div>
       
     </div>

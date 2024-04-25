@@ -2,6 +2,7 @@ const { Client } = require("@octoai/client")
 
 const client = new Client(process.env.OCTO_CLIENT_TOKEN);
 
+
 export default async function handler(req, res) {
   const body = JSON.parse(req.body);
   console.log(body.text)
